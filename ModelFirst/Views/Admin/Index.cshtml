@@ -1,0 +1,107 @@
+﻿@model IEnumerable<ModelFirst.Employee>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("CreateCompany", "Create")
+</p>
+<p>
+    @Html.ActionLink(" CreateEmployee", "CreateEmployee")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.EmpName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Position)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Company.CompanyName)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.EmpName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Position)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Company.CompanyName)
+            </td>
+            <td>
+                <button type="button">
+                    @Html.ActionLink("Edit", "Edit", new { id = item.EmpId }) 
+                </button>
+                @*@Html.ActionLink("Details", "Detail", new { id = item.EmpId }) |*@
+                <button type="button">
+                    <a class="Detail" href="javascript:;" data-id="@item.EmpId">Detail</a>
+                </button>
+                <button type="button">
+                    @Html.ActionLink("Delete", "Delete", new { id = item.EmpId }, new { onclick = "return confirm('are u sure to delete');" })
+                </button>
+            </td>
+        </tr>
+    }
+
+</table>
+<div id="partialModal" class="modal" tabindex="-1" role="dialog" style="position:center">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" style="color:lightgreen; font-size:xx-large">User Details</h3>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<script src="~/Scripts/bootstrap.js"></script>
+<script src="~/Scripts/bootstrap.min.js"></script>
+
+
+<script type="text/javascript">
+            $(function () {
+                $(".Detail").click(function () {
+                    var $buttonClicked = $(this);
+                    var id = $buttonClicked.attr('data-id')
+                    /* var id = $(this).closest("tr").find("td").eq(0).html();*/
+                    $.ajax({
+                        type: "POST",
+                        url: "/Admin/Detail",
+                        data: '{id: "' + id + '" }',
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "html",
+                        success: function (response) {
+                            $("#partialModal").find(".modal-body").html(response);
+                            $("#partialModal").modal('show');
+                        },
+                        failure: function (response) {
+                            alert(response.responseText);
+                        },
+                        error: function (response) {
+                            alert(response.responseText);
+                        }
+                    });
+                });
+            });
+</script>
+

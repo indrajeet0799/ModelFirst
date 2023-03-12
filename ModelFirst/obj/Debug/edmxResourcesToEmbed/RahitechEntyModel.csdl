@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema xmlns="http://schemas.microsoft.com/ado/2009/11/edm" xmlns:cg="http://schemas.microsoft.com/ado/2006/04/codegeneration" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" Namespace="RahitechEntyModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" annotation:UseStrongSpatialTypes="false">
+  <EntityContainer Name="RahitechEntyModelContainer" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Companies" EntityType="RahitechEntyModel.Company" />
+    <EntitySet Name="Employees" EntityType="RahitechEntyModel.Employee" />
+    <AssociationSet Name="CompanyEmployee" Association="RahitechEntyModel.CompanyEmployee">
+      <End Role="Company" EntitySet="Companies" />
+      <End Role="Employee" EntitySet="Employees" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="Company">
+    <Key>
+      <PropertyRef Name="ComId" />
+    </Key>
+    <Property Name="ComId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="CompanyName" Type="String" Nullable="false" />
+    <Property Name="CompanyAddress" Type="String" Nullable="false" />
+    <NavigationProperty Name="Employees" Relationship="RahitechEntyModel.CompanyEmployee" FromRole="Company" ToRole="Employee" />
+  </EntityType>
+  <EntityType Name="Employee">
+    <Key>
+      <PropertyRef Name="EmpId" />
+    </Key>
+    <Property Name="EmpId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="EmpName" Type="String" Nullable="false" />
+    <Property Name="Position" Type="String" Nullable="false" />
+    <Property Name="ComId" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Company" Relationship="RahitechEntyModel.CompanyEmployee" FromRole="Employee" ToRole="Company" />
+  </EntityType>
+  <Association Name="CompanyEmployee">
+    <End Type="RahitechEntyModel.Company" Role="Company" Multiplicity="1" />
+    <End Type="RahitechEntyModel.Employee" Role="Employee" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Company">
+        <PropertyRef Name="ComId" />
+      </Principal>
+      <Dependent Role="Employee">
+        <PropertyRef Name="ComId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>
