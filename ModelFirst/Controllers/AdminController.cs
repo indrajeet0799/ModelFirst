@@ -86,6 +86,11 @@ namespace ModelFirst.Controllers
             var emp = context.Employees.Find(Id);
             return PartialView("Detail",emp);
         }
+        public ActionResult Detailview(int Id)
+        {
+            var emp = context.Employees.Find(Id);
+            return PartialView("Detail", emp);
+        }
 
 
 
